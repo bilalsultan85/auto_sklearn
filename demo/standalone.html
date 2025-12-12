@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Contexts & Services Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {}
+      }
+    }
+  </script>
+  <style>
+    [v-cloak] { display: none; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+  <div id="app">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md transition-colors">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+            🌐 Global Contexts Demo
+          </h1>
+          
+          <div class="flex items-center gap-3">
+            <select 
+              id="languageSelect"
+              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="en">🇺🇸 English</option>
+              <option value="ar">🇸🇦 العربية</option>
+            </select>
+
+            <select 
+              id="currencySelect"
+              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="USD">$ USD</option>
+              <option value="SAR">ر.س SAR</option>
+              <option value="YER">﷼ YER</option>
+            </select>
+
+            <button 
+              id="themeToggle"
+              class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+            >
+              🌙 Dark
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="space-y-8">
+        
+        <!-- Context Status -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors">
+          <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            📊 Context Status
+          </h2>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700">
+              <h3 class="font-semibold mb-2 text-gray-900 dark:text-white">Language Context</h3>
+              <div class="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                <p>Current: <strong id="currentLang">en</strong></p>
+                <p>Direction: <strong id="currentDir">ltr</strong></p>
+                <p>Is RTL: <strong id="isRTL">No</strong></p>
+              </div>
+            </div>
+
+            <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700">
+              <h3 class="font-semibold mb-2 text-gray-900 dark:text-white">Currency Context</h3>
+              <div class="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                <p>Current: <strong id="currentCurrency">USD</strong></p>
+                <p>Symbol: <strong id="currencySymbol">$</strong></p>
+                <p>Example: <strong id="currencyExample">$ 1,234.56</strong></p>
+              </div>
+            </div>
+
+            <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700">
+              <h3 class="font-semibold mb-2 text-gray-900 dark:text-white">Theme Context</h3>
+              <div class="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                <p>Current: <strong id="currentTheme">light</strong></p>
+                <p>Is Dark: <strong id="isDark">No</strong></p>
+                <p>Status: <strong id="themeStatus">☀️ Day Mode</strong></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Demo Data -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors">
+          <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            💾 Storage Demo
+          </h2>
+          <button 
+            id="addItemBtn"
+            class="mb-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+          >
+            ➕ Add Random Item
+          </button>
+          <div id="itemsList" class="space-y-2"></div>
+        </section>
+
+        <!-- Interactive Demo -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors">
+          <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            🎮 Interactive Features
+          </h2>
+          
+          <div class="space-y-4">
+            <div class="p-4 border rounded-md dark:border-gray-600">
+              <h3 class="font-semibold mb-2">Currency Conversion</h3>
+              <p class="text-sm mb-2">100 USD equals:</p>
+              <ul class="space-y-1 text-sm">
+                <li>💵 <strong id="usd-to-usd">100 USD</strong></li>
+                <li>🇸🇦 <strong id="usd-to-sar">375 SAR</strong></li>
+                <li>🇾🇪 <strong id="usd-to-yer">25000 YER</strong></li>
+              </ul>
+            </div>
+
+            <div class="p-4 border rounded-md dark:border-gray-600">
+              <h3 class="font-semibold mb-2">Language Detection</h3>
+              <p class="text-sm">Current language direction: <strong id="directionText">Left-to-Right</strong></p>
+              <p class="text-sm mt-2" id="sampleText">Sample text in current language</p>
+            </div>
+
+            <div class="p-4 border rounded-md dark:border-gray-600">
+              <h3 class="font-semibold mb-2">Persistence Test</h3>
+              <p class="text-sm">Your preferences are saved to localStorage.</p>
+              <button 
+                onclick="location.reload()"
+                class="mt-2 px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+              >
+                🔄 Reload Page (Settings Persist!)
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="bg-blue-50 dark:bg-blue-900 rounded-lg shadow-md p-6 transition-colors">
+          <h2 class="text-xl font-bold mb-4 text-blue-900 dark:text-blue-100">
+            ℹ️ How to Use
+          </h2>
+          <ul class="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+            <li>✅ <strong>Language:</strong> Switch between English and Arabic (notice RTL/LTR change)</li>
+            <li>✅ <strong>Currency:</strong> Select different currencies and see formatting update</li>
+            <li>✅ <strong>Theme:</strong> Toggle between light and dark mode</li>
+            <li>✅ <strong>Storage:</strong> Add items and see them persist in localStorage</li>
+            <li>✅ <strong>Persistence:</strong> Reload the page - your settings are saved!</li>
+          </ul>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Simple state management
+    const state = {
+      language: localStorage.getItem('app_language') || 'en',
+      currency: localStorage.getItem('app_currency') || 'USD',
+      theme: localStorage.getItem('app_theme') || 'light',
+      items: JSON.parse(localStorage.getItem('demo_items') || '[]')
+    };
+
+    const currencies = {
+      USD: { symbol: '$', rate: 1 },
+      SAR: { symbol: 'ر.س', rate: 3.75 },
+      YER: { symbol: '﷼', rate: 250 }
+    };
+
+    // Initialize
+    function init() {
+      // Set initial values
+      document.getElementById('languageSelect').value = state.language;
+      document.getElementById('currencySelect').value = state.currency;
+      
+      // Apply theme
+      if (state.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+      
+      // Apply language direction
+      document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = state.language;
+      
+      updateUI();
+      renderItems();
+    }
+
+    // Update UI
+    function updateUI() {
+      // Language
+      document.getElementById('currentLang').textContent = state.language;
+      document.getElementById('currentDir').textContent = state.language === 'ar' ? 'rtl' : 'ltr';
+      document.getElementById('isRTL').textContent = state.language === 'ar' ? 'Yes' : 'No';
+      document.getElementById('directionText').textContent = 
+        state.language === 'ar' ? 'Right-to-Left' : 'Left-to-Right';
+      document.getElementById('sampleText').textContent = 
+        state.language === 'ar' ? 'هذا نص تجريبي باللغة العربية' : 'This is sample text in English';
+
+      // Currency
+      const curr = currencies[state.currency];
+      document.getElementById('currentCurrency').textContent = state.currency;
+      document.getElementById('currencySymbol').textContent = curr.symbol;
+      document.getElementById('currencyExample').textContent = 
+        `${curr.symbol} ${(1234.56).toLocaleString()}`;
+
+      // Conversions
+      document.getElementById('usd-to-usd').textContent = `${currencies.USD.symbol} 100`;
+      document.getElementById('usd-to-sar').textContent = 
+        `${currencies.SAR.symbol} ${(100 * currencies.SAR.rate).toLocaleString()}`;
+      document.getElementById('usd-to-yer').textContent = 
+        `${currencies.YER.symbol} ${(100 * currencies.YER.rate).toLocaleString()}`;
+
+      // Theme
+      const isDark = state.theme === 'dark';
+      document.getElementById('currentTheme').textContent = state.theme;
+      document.getElementById('isDark').textContent = isDark ? 'Yes' : 'No';
+      document.getElementById('themeStatus').textContent = isDark ? '🌙 Night Mode' : '☀️ Day Mode';
+      document.getElementById('themeToggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    }
+
+    // Event listeners
+    document.getElementById('languageSelect').addEventListener('change', (e) => {
+      state.language = e.target.value;
+      localStorage.setItem('app_language', state.language);
+      document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = state.language;
+      updateUI();
+    });
+
+    document.getElementById('currencySelect').addEventListener('change', (e) => {
+      state.currency = e.target.value;
+      localStorage.setItem('app_currency', state.currency);
+      updateUI();
+      renderItems();
+    });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      state.theme = state.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('app_theme', state.theme);
+      document.documentElement.classList.toggle('dark');
+      updateUI();
+    });
+
+    document.getElementById('addItemBtn').addEventListener('click', () => {
+      const item = {
+        id: Date.now(),
+        name: `Item ${state.items.length + 1}`,
+        price: Math.floor(Math.random() * 1000) + 100,
+        currency: state.currency
+      };
+      state.items.push(item);
+      localStorage.setItem('demo_items', JSON.stringify(state.items));
+      renderItems();
+    });
+
+    function renderItems() {
+      const container = document.getElementById('itemsList');
+      if (state.items.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No items yet. Add one to get started!</p>';
+        return;
+      }
+
+      container.innerHTML = state.items.map(item => {
+        const curr = currencies[state.currency];
+        const convertedPrice = item.currency === state.currency 
+          ? item.price 
+          : (item.price / currencies[item.currency].rate) * curr.rate;
+        
+        return `
+          <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 flex justify-between items-center">
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white">${item.name}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Original: ${currencies[item.currency].symbol} ${item.price.toLocaleString()}
+              </p>
+              <p class="text-green-600 dark:text-green-400 font-semibold">
+                ${curr.symbol} ${convertedPrice.toFixed(2)}
+              </p>
+            </div>
+            <button 
+              onclick="deleteItem(${item.id})"
+              class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteItem(id) {
+      state.items = state.items.filter(item => item.id !== id);
+      localStorage.setItem('demo_items', JSON.stringify(state.items));
+      renderItems();
+    }
+
+    // Initialize on load
+    init();
+
+    // Show success message
+    setTimeout(() => {
+      console.log('✅ Demo loaded successfully!');
+      console.log('📊 Current state:', state);
+    }, 100);
+  </script>
+</body>
+</html>
