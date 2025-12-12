@@ -4,6 +4,23 @@ A simple example of using autosklearn
 
 ---
 
+# 🖥️ DISPLAY THE INTERFACE
+
+## ⚡ **Instant Method (NO setup required)**
+
+**File to open:** `demo/standalone.html`
+
+**How:**
+- **Option A:** Double-click `demo/standalone.html` in file explorer
+- **Option B:** Run `open demo/standalone.html` (Mac/Linux)
+- **Option C:** Run `start demo/standalone.html` (Windows)
+
+✅ Works immediately | ✅ No installation | ✅ All basic features
+
+**Full guide:** [README_DISPLAY.md](README_DISPLAY.md) | **Problems?** [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+---
+
 ## 🎯 **Display the Interface - Quick Answer**
 
 ### ⚡ Option 1: Instant (No Installation)
